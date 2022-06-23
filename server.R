@@ -63,8 +63,8 @@ shinyServer(function(input, output, clientData, session) {
     data_scan <- list_data$scan
     v_dates <- data_scan$Date
     
-    sliderInput("date_slider", "Date d'observation",
-                min = min(v_dates), max = max(v_dates), value = min(v_dates), ticks=FALSE, timeFormat = '%d/%m/%y')
+    selectInput("date_slider", "Date d'observation",
+                choices = v_dates)
   })
   
   
@@ -86,17 +86,18 @@ shinyServer(function(input, output, clientData, session) {
     
     # jointure + filtre
     data_merg <- merge(data_limi, data_scan, by.x = "Nscan", by.y = "Nscan", all.x=T, all.y=T) # tableau avec les coordonnées de l'observateur pour localiser les activit?s humaines
-    data_merg <- subset(data_merg, Espèce!="aucun") # jdd excluant les scans sans espece inventoriee
+    data_merg <- subset(data_merg, Espèce!="aucune") # jdd excluant les scans sans espece inventoriee
     # obtenir position des observations avec azimut et distance
     data_merg2 <- f_position_obs(data_merg)
     # legende
     nb_colL <- length(unique(data_merg2$Espèce)) # defini le nb d'especes
     #coulL <- colorFactor(rainbow(nb_colL), domain = data_merg2$Espèces) # palette de couleur 
     # palette personnalisée
-    esp <- c('Barque à queue noire','Barge rousse','Bécasseau maubèche','Bécasseau sanderling',
-             'Bécasseau variable','Bécasseau violet','Courlis cendré','Courlis corlieu',
-             'Grand gravelot','Gravelot à collier interrompu','Huîtrier Pie','Pluvier argenté',
-             'Tournepierre à collier')
+    esp <- unique(data_merg$Espèce)
+    # # esp <- c('Barque à queue noire','Barge rousse','Bécasseau maubèche','Bécasseau sanderling',
+    #          'Bécasseau variable','Bécasseau violet','Courlis cendré','Courlis corlieu',
+    #          'Grand gravelot','Gravelot à collier interrompu','Huîtrier Pie','Pluvier argenté',
+    #          'Tournepierre à collier')
     couleur <-c("#FEBFD2","#CF0A1D","#003366","#BBD2E1","#660099","#80D0D0","#ED7F10","#856D4D",
                 "#FEE347","#FFF0BC","#096A09","#B3B191","#9FE855")
     coulL <- colorFactor(couleur, domain = esp)
@@ -249,7 +250,7 @@ shinyServer(function(input, output, clientData, session) {
     data_scan <- list_data$scan
     # jointure + filtre
     data_mergL <- merge(data_limi, data_scan, by.x = "Nscan", by.y = "Nscan", all.x=T, all.y=T) # tableau avec les coordonn?es de l'observateur pour localiser les activit?s humaines
-    data_mergL <- subset(data_mergL, Espèce!="aucun") # jdd excluant les scans sans espece inventoriee
+    data_mergL <- subset(data_mergL, Espèce!="aucune") # jdd excluant les scans sans espece inventoriee
     data_mergA <- merge(data_acti, data_scan, by.x = "Nscan", by.y = "Nscan", all.x=T, all.y=T) # tableau avec les coordonn?es de l'observateur pour localiser les activit?s humaines
     data_mergA <- subset(data_mergA, Activité!="aucune") # jdd excluant les scans sans activite inventoriee
     
@@ -316,7 +317,7 @@ shinyServer(function(input, output, clientData, session) {
     # jointure + filtre
     data_mergL <- merge(data_limi, data_scan, by.x = "Nscan", by.y = "Nscan", all.x=T, all.y=T) # tableau avec les coordonn?es de l'observateur pour localiser les activit?s humaines
     if (nom_espece=="") {
-      data_mergL <- subset(data_mergL, Espèce!="aucun") # jdd excluant les scans sans espece inventoriee
+      data_mergL <- subset(data_mergL, Espèce!="aucune") # jdd excluant les scans sans espece inventoriee
     } else {
       data_mergL <- subset(data_mergL, Espèce==nom_espece) # jdd excluant les scans sans espece inventoriee
     }

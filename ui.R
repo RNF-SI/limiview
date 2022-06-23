@@ -71,6 +71,7 @@ shinyUI(fixedPage(
                            checkboxGroupInput("maree", label = NULL, 
                                               choices = list("Vives-eaux" = "V", "Mortes-eaux" = "M"),
                                               selected = "V", inline=TRUE),
+                           
                            leafletOutput('carte_suivi', height=500),
                            h3("Détail:"),
                            uiOutput('resume_scans')
